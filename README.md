@@ -1,13 +1,31 @@
-# Fake Store API - Flutter Package
+# Fake Store Get Request
 
-Este paquete proporciona una interfaz sencilla para interactuar con la [Fake Store API](https://fakestoreapi.com) desde aplicaciones Flutter.
+## Features
 
-## 🚀 Instalación
+Este paquete proporciona una interfaz sencilla para interactuar con la API Fake Store(https://fakestoreapi.com) desde una aplicaciones Flutter.
 
-Agrega esta línea en tu `pubspec.yaml`:
+## Instalación
 
 ```yaml
-dependencies:
-  fake_store_api:
-    git:
-      url: https://github.com/tu_usuario/fake_store_api.git
+fake_store_get_request: ^0.0.1
+```
+
+### Usage
+
+```dart
+final service = FakeStoreService();
+final Future<List<Product>> products = service.getProducts();
+
+ListView.builder(
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return ListTile(
+                title: Text(product.title),
+              ),
+               },
+                );
+
+```
+
+Revisar el example para una mejor comprensión

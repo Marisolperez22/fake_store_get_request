@@ -11,9 +11,9 @@ class FakeStoreApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowMaterialGrid: false,
       title: 'Fake Store Example',
       home: const ProductScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

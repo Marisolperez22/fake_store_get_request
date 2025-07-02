@@ -1,3 +1,3 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+- Función inicial que permite obtener los productos de la API fake store
