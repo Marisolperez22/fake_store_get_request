@@ -7,7 +7,7 @@ Este paquete proporciona una interfaz sencilla para interactuar con la API Fake 
 ## Instalación
 
 ```yaml
-fake_store_get_request: ^0.0.1
+fake_store_get_request: ^0.0.2
 ```
 
 ### Usage

@@ -1,6 +1,6 @@
 name: fake_store_get_request
 description: "Un pacquete que permite hacer una petición a la API fakestore para obtener una lista de productos"
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/Marisolperez22/fake_store_get_request
 
 environment:
