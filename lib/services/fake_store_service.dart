@@ -1,0 +1,24 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
+import '../models/product.dart';
+
+class FakeStoreService {
+  static const String _baseUrl = 'https://fakestoreapi.com';
+  final http.Client client;
+
+  // Constructor con cliente opcional (para testing)
+  FakeStoreService({http.Client? client}) : client = client ?? http.Client();
+
+  Future<List<Product>> getProducts() async {
+    final response = await client.get(Uri.parse('$_baseUrl/products'));
+
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body);
+      return data.map((json) => Product.fromJson(json)).toList();
+    } else {
+      throw Exception('Error al cargar productos');
+    }
+  }
+}
