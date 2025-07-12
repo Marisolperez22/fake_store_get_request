@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../models/login_response.dart';
 import '../models/product.dart';
 class FakeStoreService {
   static const String _baseUrl = 'https://fakestoreapi.com';
@@ -21,7 +22,7 @@ class FakeStoreService {
     }
   }
 
-  Future<String> login(String username, String password) async {
+  Future<LoginResponse> login(String username, String password) async {
     final response = await client.post(
       Uri.parse('$_baseUrl/auth/login'),
       body: {
@@ -31,8 +32,8 @@ class FakeStoreService {
       );
 
     if (response.statusCode == 200) {
-      final String data = json.decode(response.body);
-      return data;
+      final Map<String, dynamic> data = json.decode(response.body);
+      return LoginResponse.fromJson(data);
     } else {
       throw Exception('Error al iniciar sesión');
     }
