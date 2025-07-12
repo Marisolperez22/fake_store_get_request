@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../models/product.dart';
-
 class FakeStoreService {
   static const String _baseUrl = 'https://fakestoreapi.com';
   final http.Client client;
@@ -19,6 +18,23 @@ class FakeStoreService {
       return data.map((json) => Product.fromJson(json)).toList();
     } else {
       throw Exception('Error al cargar productos');
+    }
+  }
+
+  Future<String> login(String username, String password) async {
+    final response = await client.post(
+      Uri.parse('$_baseUrl/auth/login'),
+      body: {
+        "username": username, 
+        "password": password,
+      },
+      );
+
+    if (response.statusCode == 200) {
+      final String data = json.decode(response.body);
+      return data;
+    } else {
+      throw Exception('Error al iniciar sesión');
     }
   }
 }
