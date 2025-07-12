@@ -22,10 +22,10 @@ class Product {
       id: json['id'],
       title: json['title'],
       image: json['image'],
-      rating: json['rating'],
       category: json['category'],
       description: json['description'],
       price: (json['price']).toDouble(),
+      rating: Rating.fromJson(json['rating']),
     );
   }
 }
