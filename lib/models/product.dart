@@ -3,12 +3,10 @@ class Product {
   final String? title;
   final double? price;
   final String? image;
-  // final Rating? rating;
   final String? category;
   final String? description;
 
   Product({
-    // this.rating,
     this.title,
     this.price,
     this.image,
@@ -25,18 +23,6 @@ class Product {
       category: json['category'],
       description: json['description'],
       price: (json['price']).toDouble(),
-      // rating: Rating.fromJson(json['rating']),
     );
   }
 }
-
-// class Rating {
-//   final double rate;
-//   final int count;
-
-//   Rating({required this.rate,required this.count});
-
-//   factory Rating.fromJson(Map<String, dynamic> json) {
-//     return Rating(rate: json['rate'], count: json['count']);
-//   }
-// }
