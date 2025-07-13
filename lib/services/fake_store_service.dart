@@ -62,4 +62,16 @@ class FakeStoreService {
       throw Exception('Error al cargar categorías');
     }
   }
+
+  Future<List<Product>> getProductByCategory(String category) async {
+    final response = await client.get(
+      Uri.parse('$_baseUrl/products/category/$category'),
+    );
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body);
+      return data.map((json) => Product.fromJson(json)).toList();
+    } else {
+      throw Exception('Error al cargar productos');
+    }
+  }
 }
