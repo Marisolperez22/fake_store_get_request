@@ -56,8 +56,8 @@ class FakeStoreService {
     );
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return data.map((json) => Product.fromJson(json)).toList();
+      final List<dynamic> data = json.decode(response.body);
+      return data.cast<String>();
     } else {
       throw Exception('Error al cargar categorías');
     }
