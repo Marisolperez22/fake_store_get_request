@@ -49,4 +49,17 @@ class FakeStoreService {
       throw Exception('Error al iniciar sesión');
     }
   }
+
+  Future<List<String>> getCategories() async {
+    final response = await client.get(
+      Uri.parse('$_baseUrl/products/categories'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data.map((json) => Product.fromJson(json)).toList();
+    } else {
+      throw Exception('Error al cargar categorías');
+    }
+  }
 }
