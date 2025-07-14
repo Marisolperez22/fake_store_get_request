@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fake_store_get_request/models/user.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/login_response.dart';
@@ -72,6 +73,18 @@ class FakeStoreService {
       return data.map((json) => Product.fromJson(json)).toList();
     } else {
       throw Exception('Error al cargar productos');
+    }
+  }
+
+    Future<List<User>> getUsers() async {
+    final response = await client.get(
+      Uri.parse('$_baseUrl/users'),
+    );
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body);
+      return data.map((json) => User.fromJson(json)).toList();
+    } else {
+      throw Exception('Error al cargar usuarios');
     }
   }
 }

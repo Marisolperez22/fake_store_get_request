@@ -1,4 +1,5 @@
 import 'package:fake_store_get_request/fake_store_get_request.dart';
+import 'package:fake_store_get_request/models/user.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -27,14 +28,14 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductScreen> {
   final service = FakeStoreService();
-  late Future<List<Product>> _productsFuture;
+  late Future<List<User>> _productsFuture;
   late Future<List<String>> _getCategories;
 
 
   @override
   void initState() {
     super.initState();
-    _productsFuture = service.getProductByCategory('jewerely');
+    _productsFuture = service.getUsers();
     _getCategories = service.getCategories();
 
   }
@@ -43,7 +44,7 @@ class _ProductListScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Productos')),
-      body: FutureBuilder<List<Product>>(
+      body: FutureBuilder<List<User>>(
         future: _productsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -58,7 +59,7 @@ class _ProductListScreenState extends State<ProductScreen> {
             itemBuilder: (context, index) {
               final product = products[index];
               return ListTile(
-                title: Text(product.title ?? 'Sin nombre'),
+                title: Text(product.name?.firstname ?? 'Sin nombre'),
                 // leading: Image.network(product.image ?? '', width: 50, height: 50),
                 // subtitle: Text('\$${(product.price ?? 0).toStringAsFixed(2)}'),
               );
