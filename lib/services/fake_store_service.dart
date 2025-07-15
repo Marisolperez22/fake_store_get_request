@@ -50,12 +50,12 @@ class FakeStoreService {
       final users = await getUsers();
       final user = users.firstWhere(
         (user) => user.username == username,
-        orElse: () => throw Exception("Usuario no encontrado"),
+        orElse: () => throw "Usuario no encontrado",
       );
 
       return LoginResponse(token: token.token, userId: user.id ?? 0);
     } else {
-      throw Exception('Error al iniciar sesión');
+      throw 'Error al iniciar sesión';
     }
   }
 
