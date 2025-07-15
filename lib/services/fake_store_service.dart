@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fake_store_get_request/models/cart.dart';
 import 'package:fake_store_get_request/models/user.dart';
 import 'package:http/http.dart' as http;
 
@@ -89,6 +90,17 @@ class FakeStoreService {
       return data.map((json) => User.fromJson(json)).toList();
     } else {
       throw Exception('Error al cargar usuarios');
+    }
+  }
+
+  Future<List<Cart>> getUserCart(int idUser) async {
+    final response = await client.get(Uri.parse('$_baseUrl/carts/$idUser'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final List<dynamic> products = data['products'];
+      return products.map((productJson) => Cart.fromJson(productJson)).toList();
+    } else {
+      throw Exception('Error al cargar el carrito del usuario');
     }
   }
 }
