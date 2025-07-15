@@ -55,7 +55,7 @@ class FakeStoreService {
 
       return LoginResponse(token: token.token, userId: user.id ?? 0);
     } else {
-      throw 'Error al iniciar sesión';
+      throw 'Credenciales incorrectas';
     }
   }
 
