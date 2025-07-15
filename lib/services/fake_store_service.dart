@@ -44,8 +44,14 @@ class FakeStoreService {
     );
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      return LoginResponse.fromJson(data);
+      final token = LoginResponse.fromJson(jsonDecode(response.body));
+      final users = await getUsers();
+      final user = users.firstWhere(
+        (user) => user.username == username,
+        orElse: () => throw Exception("Usuario no encontrado"),
+      );
+
+      return LoginResponse(token: token.token, userId: user.id ?? 0);
     } else {
       throw Exception('Error al iniciar sesión');
     }
@@ -76,10 +82,8 @@ class FakeStoreService {
     }
   }
 
-    Future<List<User>> getUsers() async {
-    final response = await client.get(
-      Uri.parse('$_baseUrl/users'),
-    );
+  Future<List<User>> getUsers() async {
+    final response = await client.get(Uri.parse('$_baseUrl/users'));
     if (response.statusCode == 200) {
       final List data = json.decode(response.body);
       return data.map((json) => User.fromJson(json)).toList();
