@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../models/login_response.dart';
 import '../models/product.dart';
+import '../models/sing_up_request.dart';
 
 class FakeStoreService {
   static const String _baseUrl = 'https://fakestoreapi.com';
@@ -101,6 +102,18 @@ class FakeStoreService {
       return products.map((productJson) => Cart.fromJson(productJson)).toList();
     } else {
       throw Exception('Error al cargar el carrito del usuario');
+    }
+  }
+
+    Future<void> signUp(SignupRequest request) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/users'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(request.toJson()),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to sign up: ${response.body}');
     }
   }
 }
