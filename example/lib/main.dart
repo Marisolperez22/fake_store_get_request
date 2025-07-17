@@ -29,14 +29,14 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductScreen> {
   final service = FakeStoreService();
-  late Future<List<Cart>> _productsFuture;
+  late Future<List<Product>> _productsFuture;
   late Future<List<String>> _getCategories;
 
 
   @override
   void initState() {
     super.initState();
-    _productsFuture = service.getUserCart(1);
+    _productsFuture = service.getProducts();
     _getCategories = service.getCategories();
 
   }
@@ -45,7 +45,7 @@ class _ProductListScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Productos')),
-      body: FutureBuilder<List<Cart>>(
+      body: FutureBuilder<List<Product>>(
         future: _productsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -60,7 +60,7 @@ class _ProductListScreenState extends State<ProductScreen> {
             itemBuilder: (context, index) {
               final product = products[index];
               return ListTile(
-                title: Text(product.productId.toString()),
+                title: Text((product.rating?.rate ?? 0).toString()),
                 // leading: Image.network(product.image ?? '', width: 50, height: 50),
                 // subtitle: Text('\$${(product.price ?? 0).toStringAsFixed(2)}'),
               );
