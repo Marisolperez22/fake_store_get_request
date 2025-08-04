@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:fake_store_get_request/models/product.dart';
+import 'package:fake_store_get_request/data/models/product.dart';
 import 'package:fake_store_get_request/services/fake_store_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;

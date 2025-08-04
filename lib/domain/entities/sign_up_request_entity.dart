@@ -1,4 +1,4 @@
-class SignupRequest {
+class SignUpRequestEntity {
   final String email;
   final String username;
   final String password;
@@ -6,7 +6,7 @@ class SignupRequest {
   final String lastName;
   final String phone;
 
-  SignupRequest({
+  SignUpRequestEntity({
     required this.email,
     required this.username,
     required this.password,
@@ -14,15 +14,4 @@ class SignupRequest {
     required this.lastName,
     required this.phone,
   });
-
-  Map<String, dynamic> toJson() => {
-    'email': email,
-    'username': username,
-    'password': password,
-    'name': {
-      'firstname': firstName,
-      'lastname': lastName,
-    },
-    'phone': phone,
-  };
 }

@@ -1,8 +1,7 @@
-class Cart {
-  final int productId;
-  final int quantity;
+import '../../domain/entities/cart_entity.dart';
 
-  Cart({required this.productId, required this.quantity});
+class Cart extends CartEntity {
+  Cart({required super.productId, required super.quantity});
 
   factory Cart.fromJson(Map<String, dynamic> json) =>
       Cart(productId: json["productId"], quantity: json["quantity"]);

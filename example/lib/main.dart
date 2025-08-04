@@ -1,6 +1,4 @@
 import 'package:fake_store_get_request/fake_store_get_request.dart';
-import 'package:fake_store_get_request/models/cart.dart';
-import 'package:fake_store_get_request/models/user.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -61,8 +59,6 @@ class _ProductListScreenState extends State<ProductScreen> {
               final product = products[index];
               return ListTile(
                 title: Text((product.rating?.rate ?? 0).toString()),
-                // leading: Image.network(product.image ?? '', width: 50, height: 50),
-                // subtitle: Text('\$${(product.price ?? 0).toStringAsFixed(2)}'),
               );
             },
           );

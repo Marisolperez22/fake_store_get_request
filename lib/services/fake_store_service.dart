@@ -1,18 +1,17 @@
 import 'dart:convert';
 
-import 'package:fake_store_get_request/models/cart.dart';
-import 'package:fake_store_get_request/models/user.dart';
+import 'package:fake_store_get_request/data/models/cart.dart';
+import 'package:fake_store_get_request/data/models/user.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/login_response.dart';
-import '../models/product.dart';
-import '../models/sing_up_request.dart';
+import '../data/models/product.dart';
+import '../data/models/login_response.dart';
+import '../data/models/sing_up_request.dart';
 
 class FakeStoreService {
   static const String _baseUrl = 'https://fakestoreapi.com';
   final http.Client client;
 
-  // Constructor con cliente opcional (para testing)
   FakeStoreService({http.Client? client}) : client = client ?? http.Client();
 
   Future<List<Product>> getProducts() async {

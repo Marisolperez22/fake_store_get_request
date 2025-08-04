@@ -1,5 +1,6 @@
 name: fake_store_get_request
-description: "Un pacquete que permite hacer una petición a la API fakestore para obtener una lista de productos"
+description: "Un pacquete que permite hacer una petición a la API fakestore para
+  obtener una lista de productos"
 version: 0.0.2
 homepage: https://github.com/Marisolperez22/fake_store_get_request
 
@@ -8,50 +9,19 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  build_runner: ^2.5.4
+  build_runner: ^2.6.0
+  either_dart: ^1.0.0
+  equatable: ^2.0.7
   flutter:
     sdk: flutter
   http: ^1.4.0
-  mockito: ^5.4.6
+  matcher: ^0.12.17
+  mockito: ^5.5.0
 
 dev_dependencies:
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  coverage: ^1.7.0
 
-
-
-
-
-flutter:
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+flutter: null
