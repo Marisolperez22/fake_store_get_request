@@ -7,6 +7,7 @@ import 'dart:async' as _i3;
 
 import 'package:fake_store_get_request/data/datasources/fake_store_datasource.dart'
     as _i2;
+import 'package:fake_store_get_request/data/models/product.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -33,20 +34,18 @@ class MockFakeStoreDataSource extends _i1.Mock
   }
 
   @override
+  _i3.Future<List<_i4.Product>> getProducts() =>
+      (super.noSuchMethod(
+            Invocation.method(#getProducts, []),
+            returnValue: _i3.Future<List<_i4.Product>>.value(<_i4.Product>[]),
+          )
+          as _i3.Future<List<_i4.Product>>);
+
+  @override
   _i3.Future<List<String>> getCategories() =>
       (super.noSuchMethod(
             Invocation.method(#getCategories, []),
             returnValue: _i3.Future<List<String>>.value(<String>[]),
           )
           as _i3.Future<List<String>>);
-
-  @override
-  _i3.Future<List<Map<String, dynamic>>> getProducts() =>
-      (super.noSuchMethod(
-            Invocation.method(#getProducts, []),
-            returnValue: _i3.Future<List<Map<String, dynamic>>>.value(
-              <Map<String, dynamic>>[],
-            ),
-          )
-          as _i3.Future<List<Map<String, dynamic>>>);
 }

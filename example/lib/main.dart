@@ -29,22 +29,22 @@ class _ProductListScreenState extends State<ProductScreen> {
   final service = FakeStoreService();
   late Future<List<Product>> _productsFuture;
   late Future<List<String>> _getCategories;
-
+  late Future<Product> _getProductdDetail;
 
   @override
   void initState() {
     super.initState();
     _productsFuture = service.getProducts();
     _getCategories = service.getCategories();
-
+    _getProductdDetail = service.getProductDetail(1);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Productos')),
-      body: FutureBuilder<List<Product>>(
-        future: _productsFuture,
+      body: FutureBuilder<Product>(
+        future: _getProductdDetail,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -53,15 +53,14 @@ class _ProductListScreenState extends State<ProductScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           final products = snapshot.data!;
-          return ListView.builder(
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return ListTile(
-                title: Text((product.rating?.rate ?? 0).toString()),
-              );
-            },
-          );
+          return Text(products.title ?? 'Hola');
+          // return ListView.builder(
+          //   itemCount: products.length,
+          //   itemBuilder: (context, index) {
+          //     final product = products[index];
+          //     return ListTile(title: Text((product.title ?? '').toString()));
+          //   },
+          // );
         },
       ),
     );

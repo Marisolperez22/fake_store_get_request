@@ -3,11 +3,10 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i3;
 
 import 'package:fake_store_get_request/core/infrastructure/api_client.dart'
-    as _i3;
-import 'package:http/http.dart' as _i2;
+    as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -24,40 +23,19 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeClient_0 extends _i1.SmartFake implements _i2.Client {
-  _FakeClient_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
 /// A class which mocks [ApiClient].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockApiClient extends _i1.Mock implements _i3.ApiClient {
+class MockApiClient extends _i1.Mock implements _i2.ApiClient {
   MockApiClient() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.Client get client =>
-      (super.noSuchMethod(
-            Invocation.getter(#client),
-            returnValue: _FakeClient_0(this, Invocation.getter(#client)),
-          )
-          as _i2.Client);
-
-  @override
-  _i4.Future<dynamic> get(String? url) =>
+  _i3.Future<dynamic> get(String? url) =>
       (super.noSuchMethod(
             Invocation.method(#get, [url]),
-            returnValue: _i4.Future<dynamic>.value(),
+            returnValue: _i3.Future<dynamic>.value(),
           )
-          as _i4.Future<dynamic>);
-
-  @override
-  _i4.Future<dynamic> post(String? url, {Map<String, dynamic>? body}) =>
-      (super.noSuchMethod(
-            Invocation.method(#post, [url], {#body: body}),
-            returnValue: _i4.Future<dynamic>.value(),
-          )
-          as _i4.Future<dynamic>);
+          as _i3.Future<dynamic>);
 }

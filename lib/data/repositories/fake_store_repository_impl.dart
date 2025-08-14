@@ -15,9 +15,9 @@ class FakeStoreRepositoryImpl implements FakeStoreRepository {
   @override
   Future<Either<Failure, List<ProductEntity>>> getProducts() async {
     try {
-      final productsJson = await dataSource.getProducts();
-      final products = productsJson.map((e) => Product.fromJson(e)).toList();
-      return Right(products.toEntityList());
+      final productModel = await dataSource.getProducts();
+      final products = productModel.map((e) => e.toEntity()).toList();
+      return Right(products);
     } catch (e) {
       return Utils.handleException(e);
     }

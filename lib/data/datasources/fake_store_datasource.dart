@@ -1,14 +1,18 @@
+import 'package:fake_store_get_request/data/models/product.dart';
+
 import '../../core/infrastructure/api_client.dart';
+import '../models/login_response.dart';
 
 abstract class FakeStoreDataSource {
+  Future<List<Product>> getProducts();
   Future<List<String>> getCategories();
-  Future<List<Map<String, dynamic>>> getProducts();
+  Future<Product> getProductDetail(int productId);
+  // Future<LoginResponse> login(String username, String password);
 
   // Future<List<Map<String, dynamic>>> getUsers();
+
   // Future<void> signUp(Map<String, dynamic> request);
   // Future<List<Map<String, dynamic>>> getUserCart(int idUser);
-  // Future<Map<String, dynamic>> getProductDetail(int productId);
-  // Future<Map<String, dynamic>> login(String username, String password);
   // Future<List<Map<String, dynamic>>> getProductByCategory(String category);
 }
 
@@ -16,25 +20,32 @@ class FakeStoreRemoteDataSource implements FakeStoreDataSource {
   final ApiClient apiClient;
   static const String _baseUrl = 'https://fakestoreapi.com';
 
-  FakeStoreRemoteDataSource({required this.apiClient});
+  FakeStoreRemoteDataSource({ApiClient? apiClient})
+    : apiClient = apiClient ?? ApiClient();
 
   @override
-  Future<List<Map<String, dynamic>>> getProducts() async {
-    final response = await apiClient.get('$_baseUrl/products');
-    return List<Map<String, dynamic>>.from(response);
+  Future<List<Product>> getProducts() async {
+    final data = await apiClient.get('$_baseUrl/products');
+    return (data as List).map((json) => Product.fromJson(json)).toList();
   }
 
   @override
   Future<List<String>> getCategories() async {
-    final response = await apiClient.get('$_baseUrl/products/categories');
-    return List<String>.from(response);
+    final data = await apiClient.get('$_baseUrl/products/categories');
+    return (data as List).cast<String>();
   }
 
-  // @override
-  // Future<Map<String, dynamic>> getProductDetail(int productId) async {
-  //   final response = await apiClient.get('$_baseUrl/products/$productId');
-  //   return Map<String, dynamic>.from(response);
-  // }
+  @override
+  Future<Product> getProductDetail(int productId) async {
+    final data = await apiClient.get('$_baseUrl/products/$productId');
+    return Product.fromJson(data);
+  }
+
+  //   @override
+  //   Future<LoginResponse> login(String username, String password) async {
+  //  final data = await apiClient.get('$_baseUrl/auth/login');
+  //     return Product.fromJson(data);
+  //   }
 
   // @override
   // Future<List<Map<String, dynamic>>> getProductByCategory(String category) {
@@ -51,12 +62,6 @@ class FakeStoreRemoteDataSource implements FakeStoreDataSource {
   // @override
   // Future<List<Map<String, dynamic>>> getUsers() {
   //   // TODO: implement getUsers
-  //   throw UnimplementedError();
-  // }
-
-  // @override
-  // Future<Map<String, dynamic>> login(String username, String password) {
-  //   // TODO: implement login
   //   throw UnimplementedError();
   // }
 
