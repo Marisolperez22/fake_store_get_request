@@ -3,11 +3,13 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i6;
 
 import 'package:fake_store_get_request/data/datasources/fake_store_datasource.dart'
-    as _i2;
-import 'package:fake_store_get_request/data/models/product.dart' as _i4;
+    as _i5;
+import 'package:fake_store_get_request/data/models/cart.dart' as _i2;
+import 'package:fake_store_get_request/data/models/login_response.dart' as _i4;
+import 'package:fake_store_get_request/data/models/product.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -24,28 +26,87 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeCart_0 extends _i1.SmartFake implements _i2.Cart {
+  _FakeCart_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeProduct_1 extends _i1.SmartFake implements _i3.Product {
+  _FakeProduct_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeLoginResponse_2 extends _i1.SmartFake implements _i4.LoginResponse {
+  _FakeLoginResponse_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [FakeStoreDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFakeStoreDataSource extends _i1.Mock
-    implements _i2.FakeStoreDataSource {
+    implements _i5.FakeStoreDataSource {
   MockFakeStoreDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<List<_i4.Product>> getProducts() =>
+  _i6.Future<List<_i3.Product>> getProducts() =>
       (super.noSuchMethod(
             Invocation.method(#getProducts, []),
-            returnValue: _i3.Future<List<_i4.Product>>.value(<_i4.Product>[]),
+            returnValue: _i6.Future<List<_i3.Product>>.value(<_i3.Product>[]),
           )
-          as _i3.Future<List<_i4.Product>>);
+          as _i6.Future<List<_i3.Product>>);
 
   @override
-  _i3.Future<List<String>> getCategories() =>
+  _i6.Future<List<String>> getCategories() =>
       (super.noSuchMethod(
             Invocation.method(#getCategories, []),
-            returnValue: _i3.Future<List<String>>.value(<String>[]),
+            returnValue: _i6.Future<List<String>>.value(<String>[]),
           )
-          as _i3.Future<List<String>>);
+          as _i6.Future<List<String>>);
+
+  @override
+  _i6.Future<_i2.Cart> getUserCart(int? idUser) =>
+      (super.noSuchMethod(
+            Invocation.method(#getUserCart, [idUser]),
+            returnValue: _i6.Future<_i2.Cart>.value(
+              _FakeCart_0(this, Invocation.method(#getUserCart, [idUser])),
+            ),
+          )
+          as _i6.Future<_i2.Cart>);
+
+  @override
+  _i6.Future<_i3.Product> getProductDetail(int? productId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getProductDetail, [productId]),
+            returnValue: _i6.Future<_i3.Product>.value(
+              _FakeProduct_1(
+                this,
+                Invocation.method(#getProductDetail, [productId]),
+              ),
+            ),
+          )
+          as _i6.Future<_i3.Product>);
+
+  @override
+  _i6.Future<List<_i3.Product>> getProductByCategory(String? category) =>
+      (super.noSuchMethod(
+            Invocation.method(#getProductByCategory, [category]),
+            returnValue: _i6.Future<List<_i3.Product>>.value(<_i3.Product>[]),
+          )
+          as _i6.Future<List<_i3.Product>>);
+
+  @override
+  _i6.Future<_i4.LoginResponse> login(String? username, String? password) =>
+      (super.noSuchMethod(
+            Invocation.method(#login, [username, password]),
+            returnValue: _i6.Future<_i4.LoginResponse>.value(
+              _FakeLoginResponse_2(
+                this,
+                Invocation.method(#login, [username, password]),
+              ),
+            ),
+          )
+          as _i6.Future<_i4.LoginResponse>);
 }

@@ -7,8 +7,9 @@ import 'dart:async' as _i3;
 
 import 'package:either_dart/either.dart' as _i4;
 import 'package:fake_store_get_request/core/errors/failures.dart' as _i5;
-import 'package:fake_store_get_request/domain/entities/product_entity.dart'
-    as _i7;
+import 'package:fake_store_get_request/data/models/cart.dart' as _i8;
+import 'package:fake_store_get_request/data/models/login_response.dart' as _i9;
+import 'package:fake_store_get_request/data/models/product.dart' as _i7;
 import 'package:fake_store_get_request/domain/repositories/fake_store_repository.dart'
     as _i2;
 import 'package:mockito/mockito.dart' as _i1;
@@ -52,17 +53,77 @@ class MockFakeStoreRepository extends _i1.Mock
           as _i3.Future<_i4.Either<_i5.Failure, List<String>>>);
 
   @override
-  _i3.Future<_i4.Either<_i5.Failure, List<_i7.ProductEntity>>> getProducts() =>
+  _i3.Future<_i4.Either<_i5.Failure, List<_i7.Product>>> getProducts() =>
       (super.noSuchMethod(
             Invocation.method(#getProducts, []),
-            returnValue: _i3.Future<
-              _i4.Either<_i5.Failure, List<_i7.ProductEntity>>
-            >.value(
-              _i6.dummyValue<_i4.Either<_i5.Failure, List<_i7.ProductEntity>>>(
+            returnValue:
+                _i3.Future<_i4.Either<_i5.Failure, List<_i7.Product>>>.value(
+                  _i6.dummyValue<_i4.Either<_i5.Failure, List<_i7.Product>>>(
+                    this,
+                    Invocation.method(#getProducts, []),
+                  ),
+                ),
+          )
+          as _i3.Future<_i4.Either<_i5.Failure, List<_i7.Product>>>);
+
+  @override
+  _i3.Future<_i4.Either<_i5.Failure, _i8.Cart>> getUserCart(int? idUser) =>
+      (super.noSuchMethod(
+            Invocation.method(#getUserCart, [idUser]),
+            returnValue: _i3.Future<_i4.Either<_i5.Failure, _i8.Cart>>.value(
+              _i6.dummyValue<_i4.Either<_i5.Failure, _i8.Cart>>(
                 this,
-                Invocation.method(#getProducts, []),
+                Invocation.method(#getUserCart, [idUser]),
               ),
             ),
           )
-          as _i3.Future<_i4.Either<_i5.Failure, List<_i7.ProductEntity>>>);
+          as _i3.Future<_i4.Either<_i5.Failure, _i8.Cart>>);
+
+  @override
+  _i3.Future<_i4.Either<_i5.Failure, _i7.Product>> getProductDetail(
+    int? productId,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getProductDetail, [productId]),
+            returnValue: _i3.Future<_i4.Either<_i5.Failure, _i7.Product>>.value(
+              _i6.dummyValue<_i4.Either<_i5.Failure, _i7.Product>>(
+                this,
+                Invocation.method(#getProductDetail, [productId]),
+              ),
+            ),
+          )
+          as _i3.Future<_i4.Either<_i5.Failure, _i7.Product>>);
+
+  @override
+  _i3.Future<_i4.Either<_i5.Failure, List<_i7.Product>>> getProductByCategory(
+    String? category,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getProductByCategory, [category]),
+            returnValue:
+                _i3.Future<_i4.Either<_i5.Failure, List<_i7.Product>>>.value(
+                  _i6.dummyValue<_i4.Either<_i5.Failure, List<_i7.Product>>>(
+                    this,
+                    Invocation.method(#getProductByCategory, [category]),
+                  ),
+                ),
+          )
+          as _i3.Future<_i4.Either<_i5.Failure, List<_i7.Product>>>);
+
+  @override
+  _i3.Future<_i4.Either<_i5.Failure, _i9.LoginResponse>> login(
+    String? username,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#login, [username, password]),
+            returnValue:
+                _i3.Future<_i4.Either<_i5.Failure, _i9.LoginResponse>>.value(
+                  _i6.dummyValue<_i4.Either<_i5.Failure, _i9.LoginResponse>>(
+                    this,
+                    Invocation.method(#login, [username, password]),
+                  ),
+                ),
+          )
+          as _i3.Future<_i4.Either<_i5.Failure, _i9.LoginResponse>>);
 }

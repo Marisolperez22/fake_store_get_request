@@ -46,22 +46,23 @@ class FakeStoreService {
   //   }
   // }
 
+  Future<LoginResponse> login(String username, String password) async {
+    final data = await apiClient.post(
+      '$_baseUrl/auth/login',
+      body: {'username': username, 'password': password},
+    );
+    return LoginResponse.fromJson(data);
+  }
+
   Future<List<String>> getCategories() async {
     final data = await apiClient.get('$_baseUrl/products/categories');
     return (data as List).cast<String>();
   }
 
-  // Future<List<Product>> getProductByCategory(String category) async {
-  //   final response = await client.get(
-  //     Uri.parse('$_baseUrl/products/category/$category'),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     final List data = json.decode(response.body);
-  //     return data.map((json) => Product.fromJson(json)).toList();
-  //   } else {
-  //     throw Exception('Error al cargar productos');
-  //   }
-  // }
+  Future<List<Product>> getProductByCategory(String category) async {
+    final data = await apiClient.get('$_baseUrl/products/category/$category');
+    return (data as List).map((json) => Product.fromJson(json)).toList();
+  }
 
   // Future<List<User>> getUsers() async {
   //   final response = await client.get(Uri.parse('$_baseUrl/users'));
@@ -73,16 +74,11 @@ class FakeStoreService {
   //   }
   // }
 
-  // Future<List<Cart>> getUserCart(int idUser) async {
-  //   final response = await client.get(Uri.parse('$_baseUrl/carts/$idUser'));
-  //   if (response.statusCode == 200) {
-  //     final Map<String, dynamic> data = json.decode(response.body);
-  //     final List<dynamic> products = data['products'];
-  //     return products.map((productJson) => Cart.fromJson(productJson)).toList();
-  //   } else {
-  //     throw Exception('Error al cargar el carrito del usuario');
-  //   }
-  // }
+  Future<Cart> getUserCart(int idUser) async {
+    final data = await apiClient.get('$_baseUrl/carts/$idUser');
+    return Cart.fromJson(data);
+  }
+}
 
   // Future<void> signUp(SignupRequest request) async {
   //   final response = await http.post(
@@ -95,4 +91,4 @@ class FakeStoreService {
   //     throw Exception('Failed to sign up: ${response.body}');
   //   }
   // }
-}
+

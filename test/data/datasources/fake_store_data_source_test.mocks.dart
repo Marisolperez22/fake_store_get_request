@@ -38,4 +38,12 @@ class MockApiClient extends _i1.Mock implements _i2.ApiClient {
             returnValue: _i3.Future<dynamic>.value(),
           )
           as _i3.Future<dynamic>);
+
+  @override
+  _i3.Future<dynamic> post(String? url, {Map<String, dynamic>? body}) =>
+      (super.noSuchMethod(
+            Invocation.method(#post, [url], {#body: body}),
+            returnValue: _i3.Future<dynamic>.value(),
+          )
+          as _i3.Future<dynamic>);
 }

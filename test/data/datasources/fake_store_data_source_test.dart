@@ -1,5 +1,7 @@
 import 'package:fake_store_get_request/core/infrastructure/api_client.dart';
 import 'package:fake_store_get_request/data/datasources/fake_store_datasource.dart';
+import 'package:fake_store_get_request/data/models/cart.dart';
+import 'package:fake_store_get_request/data/models/login_response.dart';
 import 'package:fake_store_get_request/data/models/product.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -83,6 +85,124 @@ void main() {
         ).thenThrow(ServerException(message: 'Error'));
 
         expect(() => dataSource.getProducts(), throwsA(isA<ServerException>()));
+      });
+    });
+
+    group('login', () {
+      final tLoginResponse = {
+        "token":
+            "eyJhbGciJIUzI1NinR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXIiOiJqb2huZCIsImlhdCI6MTc1NTY1MjkyMX0.TDkYAEEmz-Jdet7NyuSObXdnmwlt2HOktqXvtgYJ8ls",
+      };
+
+      test('Debería retornar un token y un id al hacer login', () async {
+        // Arrange
+        when(
+          mockApiClient.post(
+            '$baseUrl/auth/login',
+            body: {'username': 'test', 'password': 'test'},
+          ),
+        ).thenAnswer((_) async => tLoginResponse);
+
+        // Act
+        final result = await dataSource.login('test', 'test');
+
+        // Assert
+        expect(result, isA<LoginResponse>());
+      });
+
+      test(
+        'Debería retornar un error cuando el llamado a la API falla',
+        () async {
+          // Arrange
+          when(
+            mockApiClient.post(
+              '$baseUrl/auth/login',
+              body: {'username': 'test', 'password': 'test'},
+            ),
+          ).thenAnswer((_) async => tLoginResponse);
+
+          // Act
+          final result = await dataSource.login('test', 'test');
+
+          // Assert
+          expect(result, isA<LoginResponse>());
+        },
+      );
+
+      test('Debe mostrar un error cuando el llamado a la API falla', () async {
+        when(
+          mockApiClient.post('$baseUrl/auth/login',
+              body: {'username': 'test', 'password': 'test'},),
+        ).thenThrow(ServerException(message: 'Error'));
+
+        expect(() => dataSource.login('test', 'test'), throwsA(isA<ServerException>()));
+      });
+    });
+
+    group('get products by category', (){
+      final tCategory = 'electronics';
+     
+
+      test('Debería retornar la lista de productos por categoría', () async {
+        when(
+          mockApiClient.get('$baseUrl/products/category/$tCategory'),
+        ).thenAnswer((_) async => tProductsJson);
+
+        final result = await dataSource.getProductByCategory(tCategory);
+
+        expect(result, isA<List<Product>>());
+        expect(result.length, 2);
+      });
+
+      test('Debe mostrar un error cuando el llamado a la API falla', () async {
+        when(
+          mockApiClient.get(any),
+        ).thenThrow(ServerException(message: 'Error'));
+
+        expect(() => dataSource.getProductByCategory(tCategory), throwsA(isA<ServerException>()));
+      });
+    });
+
+     group('get user cart', (){
+      final tUserId = 1;   
+
+      final tCart = {
+    "id": 1,
+    "userId": 1,
+    "date": "2020-03-02T00:00:00.000Z",
+    "products": [
+        {
+            "productId": 1,
+            "quantity": 4
+        },
+        {
+            "productId": 2,
+            "quantity": 1
+        },
+        {
+            "productId": 3,
+            "quantity": 6
+        }
+    ],
+    "__v": 0
+};  
+
+      test('Debería retornar los productos del carrito', () async {
+        when(
+          mockApiClient.get('$baseUrl/carts/$tUserId'),
+        ).thenAnswer((_) async => tCart);
+
+        final result = await dataSource.getUserCart(tUserId);
+
+        expect(result, isA<Cart>());
+      });
+
+      test('Debe mostrar un error cuando el llamado a la API falla', () async {
+        when(
+          mockApiClient.get(any),
+        ).thenThrow(ServerException(message: 'Error'));
+
+        expect(() => dataSource.getUserCart(tUserId), throwsA(isA<ServerException>()));
       });
     });
   });

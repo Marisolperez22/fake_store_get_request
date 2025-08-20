@@ -1,3 +1,5 @@
+import 'package:fake_store_get_request/data/models/cart.dart';
+import 'package:fake_store_get_request/data/models/login_response.dart';
 import 'package:fake_store_get_request/fake_store_get_request.dart';
 import 'package:flutter/material.dart';
 
@@ -27,24 +29,30 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductScreen> {
   final service = FakeStoreService();
-  late Future<List<Product>> _productsFuture;
-  late Future<List<String>> _getCategories;
-  late Future<Product> _getProductdDetail;
+  // late Future<List<Product>> _productsFuture;
+  // late Future<List<String>> _getCategories;
+  // late Future<Product> _getProductdDetail;
+  // late Future<LoginResponse> _login;
+  late Future<Cart> _getUserCart;
+
+
 
   @override
   void initState() {
     super.initState();
-    _productsFuture = service.getProducts();
-    _getCategories = service.getCategories();
-    _getProductdDetail = service.getProductDetail(1);
+    // _productsFuture = service.getProductByCategory('electronics');
+    // _getCategories = service.getCategories();
+    // _login = service.login('mor_2314', '83r5^_');
+    // _getProductdDetail = service.getProductDetail(1);
+    _getUserCart = service.getUserCart(1);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Productos')),
-      body: FutureBuilder<Product>(
-        future: _getProductdDetail,
+      body: FutureBuilder<Cart>(
+        future: _getUserCart,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -53,7 +61,7 @@ class _ProductListScreenState extends State<ProductScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           final products = snapshot.data!;
-          return Text(products.title ?? 'Hola');
+          return Text((products.products?[0].quantity).toString());
           // return ListView.builder(
           //   itemCount: products.length,
           //   itemBuilder: (context, index) {

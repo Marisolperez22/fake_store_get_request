@@ -1,19 +1,18 @@
 import 'package:either_dart/either.dart';
 
+import '../../data/models/cart.dart';
+import '../../data/models/product.dart';
 import '../../core/errors/failures.dart';
-import '../entities/product_entity.dart';
+import '../../data/models/login_response.dart';
 
 abstract class FakeStoreRepository {
   Future<Either<Failure, List<String>>> getCategories();
-  Future<Either<Failure, List<ProductEntity>>> getProducts();
-
-  // Future<Either<Failure, List<User>>> getUsers();
-  //   Future<Either<Failure, List<Cart>>> getUserCart(int idUser);
-  //   Future<Either<Failure, void>> signUp(SignupRequest request);
-  //   Future<Either<Failure, Product>> getProductDetail(int productId);
-  //   Future<Either<Failure, List<Product>>> getProductByCategory(String category);
-  //   Future<Either<Failure, LoginResponse>> login(
-  //     String username,
-  //     String password,
-  //   );
+  Future<Either<Failure, List<Product>>> getProducts();
+  Future<Either<Failure, Cart>> getUserCart(int idUser);
+  Future<Either<Failure, Product>> getProductDetail(int productId);
+  Future<Either<Failure, List<Product>>> getProductByCategory(String category);
+  Future<Either<Failure, LoginResponse>> login(
+    String username,
+    String password,
+  );
 }

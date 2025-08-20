@@ -1,19 +1,16 @@
 import 'package:fake_store_get_request/data/models/product.dart';
 
 import '../../core/infrastructure/api_client.dart';
+import '../models/cart.dart';
 import '../models/login_response.dart';
 
 abstract class FakeStoreDataSource {
   Future<List<Product>> getProducts();
   Future<List<String>> getCategories();
+  Future<Cart> getUserCart(int idUser);
   Future<Product> getProductDetail(int productId);
-  // Future<LoginResponse> login(String username, String password);
-
-  // Future<List<Map<String, dynamic>>> getUsers();
-
-  // Future<void> signUp(Map<String, dynamic> request);
-  // Future<List<Map<String, dynamic>>> getUserCart(int idUser);
-  // Future<List<Map<String, dynamic>>> getProductByCategory(String category);
+  Future<List<Product>> getProductByCategory(String category);
+  Future<LoginResponse> login(String username, String password);
 }
 
 class FakeStoreRemoteDataSource implements FakeStoreDataSource {
@@ -41,33 +38,25 @@ class FakeStoreRemoteDataSource implements FakeStoreDataSource {
     return Product.fromJson(data);
   }
 
-  //   @override
-  //   Future<LoginResponse> login(String username, String password) async {
-  //  final data = await apiClient.get('$_baseUrl/auth/login');
-  //     return Product.fromJson(data);
-  //   }
+  @override
+  Future<LoginResponse> login(String username, String password) async {
+    final data = await apiClient.post(
+      '$_baseUrl/auth/login',
+      body: {'username': username, 'password': password},
+    );
 
-  // @override
-  // Future<List<Map<String, dynamic>>> getProductByCategory(String category) {
-  //   // TODO: implement getProductByCategory
-  //   throw UnimplementedError();
-  // }
+    return LoginResponse.fromJson(data);
+  }
 
-  // @override
-  // Future<List<Map<String, dynamic>>> getUserCart(int idUser) {
-  //   // TODO: implement getUserCart
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<List<Product>> getProductByCategory(String category) async {
+    final data = await apiClient.get('$_baseUrl/products/category/$category');
+    return (data as List).map((json) => Product.fromJson(json)).toList();
+  }
 
-  // @override
-  // Future<List<Map<String, dynamic>>> getUsers() {
-  //   // TODO: implement getUsers
-  //   throw UnimplementedError();
-  // }
-
-  // @override
-  // Future<void> signUp(Map<String, dynamic> request) {
-  //   // TODO: implement signUp
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<Cart> getUserCart(int idUser) async {
+    final data = await apiClient.get('$_baseUrl/carts/$idUser');
+    return Cart.fromJson(data);
+  }
 }

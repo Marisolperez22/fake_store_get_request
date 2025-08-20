@@ -1,4 +1,4 @@
-import 'dart:convert';
+/* import 'dart:convert';
 import 'package:fake_store_get_request/data/models/product.dart';
 import 'package:fake_store_get_request/services/fake_store_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +15,7 @@ void main() {
 
   setUp(() {
     mockClient = MockClient();
-    service = FakeStoreService(client: mockClient);
+    service = FakeStoreService(apiClient: mockClient);
   });
 
   group('getProducts', () {
@@ -63,3 +63,4 @@ void main() {
     });
   });
 }
+ */

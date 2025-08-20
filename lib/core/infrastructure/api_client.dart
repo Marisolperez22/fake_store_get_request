@@ -49,10 +49,10 @@ class ApiClient {
   Future<dynamic> post(String url, {Map<String, dynamic>? body}) async {
     final response = await _client.post(
       Uri.parse(url),
-      body: body != null ? json.encode(body) : null,
+      body: body,
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       return json.decode(response.body);
     } else {
       throw ServerException(message: 'Error en la petición POST: $url');

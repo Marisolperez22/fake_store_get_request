@@ -1,231 +1,208 @@
+import 'package:either_dart/either.dart';
 import 'package:fake_store_get_request/core/errors/failures.dart';
+import 'package:fake_store_get_request/core/infrastructure/api_client.dart';
 import 'package:fake_store_get_request/data/datasources/fake_store_datasource.dart';
+import 'package:fake_store_get_request/data/models/cart.dart';
+import 'package:fake_store_get_request/data/models/login_response.dart';
+import 'package:fake_store_get_request/data/models/product.dart';
+import 'package:fake_store_get_request/data/models/rating.dart';
 import 'package:fake_store_get_request/data/repositories/fake_store_repository_impl.dart';
-import 'package:fake_store_get_request/domain/entities/product_entity.dart';
-import 'package:fake_store_get_request/domain/entities/rating_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'fake_store_repository_impl_test.mocks.dart';
 
-class CustomException implements Exception {
-  final String type;
-  final String? title;
-  final String? message;
-  final int? codeError;
-
-  CustomException({
-    required this.type,
-    this.title,
-    this.message,
-    this.codeError,
-  });
-}
-
 @GenerateMocks([FakeStoreDataSource])
 void main() {
-  late FakeStoreRepositoryImpl repository;
-  late MockFakeStoreDataSource mockDataSource;
+  late FakeStoreRepositoryImpl repositoryImpl;
+  late MockFakeStoreDataSource mockFakeStoreDataSource;
 
   setUp(() {
-    mockDataSource = MockFakeStoreDataSource();
-    repository = FakeStoreRepositoryImpl(dataSource: mockDataSource);
+    mockFakeStoreDataSource = MockFakeStoreDataSource();
+    repositoryImpl = FakeStoreRepositoryImpl(
+      dataSource: mockFakeStoreDataSource,
+    );
   });
-
-  group('getProducts', () {
-    final tProductsJson = [
-      {
-        'id': 1,
-        'title': 'Test Product',
-        'price': 109.95,
-        'description': 'Test Description',
-        'category': 'electronics',
-        'image': 'test.jpg',
-        'rating': {'rate': 4.5, 'count': 120},
-      },
-    ];
-
-    final tProductEntity = ProductEntity(
+  final tProducts = [
+    Product(
       id: 1,
       title: 'Test Product',
       price: 109.95,
       description: 'Test Description',
       category: 'electronics',
       image: 'test.jpg',
-      rating: RatingEntity(rate: 4.5, count: 120),
-    );
-
-    test(
-      'should return Right with products when data source is successful',
-      () async {
-        // Arrange
-        when(
-          mockDataSource.getProducts(),
-        ).thenAnswer((_) async => tProductsJson);
-
-        // Act
-        final result = await repository.getProducts();
-
-        // Assert
-        result.fold(
-          (failure) => fail('Expected Right but got Left with $failure'),
-          (products) {
-            expect(products, [tProductEntity]);
-            expect(products.first.id, equals(1));
-          },
-        );
-        verify(mockDataSource.getProducts());
-      },
-    );
-
-    test('should return TimeOutFailure when timeout occurs', () async {
+      rating: Rating(count: 120, rate: 4.5),
+    ),
+    Product(
+      id: 2,
+      title: 'Test Product 2',
+      price: 108.95,
+      description: 'Test Description 2',
+      category: 'jewelery',
+      image: 'test2.jpg',
+      rating: Rating(count: 200, rate: 5.0),
+    ),
+  ];
+  group('getProducts', () {
+    test('Debería retornar la lista de productos', () async {
       // Arrange
       when(
-        mockDataSource.getProducts(),
-      ).thenThrow(CustomException(type: 'TimeoutException'));
+        mockFakeStoreDataSource.getProducts(),
+      ).thenAnswer((_) async => tProducts);
 
       // Act
-      final result = await repository.getProducts();
+      final result = await repositoryImpl.getProducts();
 
       // Assert
-      result.fold(
-        (failure) => expect(failure, isA<TimeOutFailure>()),
-        (_) => fail('Expected Left but got Right'),
-      );
+      expect(result, isA<Right<Failure, List<Product>>>());
+      result.fold((failure) => fail('No debería retornar failure'), (products) {
+        expect(products.length, 2);
+        expect(products[0].id, 1);
+        expect(products[1].title, 'Test Product 2');
+      });
     });
 
-    test('should return AuthFailure when unauthorized', () async {
-      // Arrange
+    test('Debe mostrar un error cuando el llamado a la API falla', () async {
+      /// Arrange
       when(
-        mockDataSource.getProducts(),
-      ).thenThrow(CustomException(type: 'UnAuthorization'));
+        mockFakeStoreDataSource.getProducts(),
+      ).thenThrow(ServerException(message: 'Error'));
 
-      // Act
-      final result = await repository.getProducts();
+      final result = await repositoryImpl.getProducts();
 
-      // Assert
-      result.fold(
-        (failure) => expect(failure, isA<AuthFailure>()),
-        (_) => fail('Expected Left but got Right'),
-      );
-    });
-
-    test('should return BadRequest when bad request occurs', () async {
-      // Arrange
-      when(mockDataSource.getProducts()).thenThrow(
-        CustomException(
-          type: 'BadRequest',
-          title: 'Bad Request',
-          message: 'Invalid data',
-          codeError: 400,
-        ),
-      );
-
-      // Act
-      final result = await repository.getProducts();
-
-      // Assert
-      result.fold((failure) {
-        expect(failure, isA<BadRequest>());
-        expect((failure as BadRequest).title, 'Bad Request');
-      }, (_) => fail('Expected Left but got Right'));
-    });
-
-    test('should return AnotherFailure for unknown exceptions', () async {
-      // Arrange
-      when(mockDataSource.getProducts()).thenThrow(
-        CustomException(
-          type: 'AnotherFailure',
-          title: 'Bad Request',
-          message: 'Invalid data',
-          codeError: 400,
-        ),
-      );
-
-      // Act
-      final result = await repository.getProducts();
-
-      // Assert
-      result.fold(
-        (failure) => expect(failure, isA<AnotherFailure>()),
-        (_) => fail('Expected Left but got Right'),
-      );
+     expect(result, isA<Left<Failure, List<Product>>>());
     });
   });
 
   group('getCategories', () {
-    final tCategories = ['electronics', 'jewelery', 'men\'s clothing'];
+    final tCategoriesJson = ['electronics', 'jewelery', 'men\'s clothing'];
+
+    test('Debería retornar la lista de categorías', () async {
+      when(
+        mockFakeStoreDataSource.getCategories(),
+      ).thenAnswer((_) async => tCategoriesJson);
+
+      final result = await repositoryImpl.getCategories();
+
+      expect(result, isA<Right<Failure, List<String>>>());
+      result.fold((failure) => fail('No debería retornar failure'), (
+        categories,
+      ) {
+        expect(categories.length, 3);
+        expect(categories[0], 'electronics');
+      });
+    });
+
+    test('Debe mostrar un error cuando el llamado a la API falla', () async {
+      when(
+        mockFakeStoreDataSource.getCategories(),
+      ).thenThrow(ServerException(message: 'Error'));
+
+     final result = await repositoryImpl.getCategories();
+
+      // Assert
+      expect(result, isA<Left<Failure, List<String>>>());
+    });
+  });
+
+  group('login', () {
+    final tLoginResponse = LoginResponse(
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+    );
+
+    test('Debería retornar un token al hacer login', () async {
+      // Arrange
+      when(
+        mockFakeStoreDataSource.login('username', 'password'),
+      ).thenAnswer((_) async => tLoginResponse);
+
+      // Act
+      final result = await repositoryImpl.login('test', 'test');
+
+      // Assert
+      expect(result, isA<Right<Failure, LoginResponse>>());
+     
+    });
 
     test(
-      'should return Right with categories when data source is successful',
+      'Debería retornar un error cuando el llamado a la API falla',
       () async {
         // Arrange
         when(
-          mockDataSource.getCategories(),
-        ).thenAnswer((_) async => tCategories);
+          mockFakeStoreDataSource.login('username', 'password'),
+        ).thenAnswer((_) async => tLoginResponse);
 
         // Act
-        final result = await repository.getCategories();
+        final result = await repositoryImpl.login('username', 'password');
 
         // Assert
-        result.fold(
-          (failure) => fail('Expected Right but got Left'),
-          (categories) => expect(categories, tCategories),
-        );
-        verify(mockDataSource.getCategories());
+        expect(result, isA<Left<Failure, LoginResponse>>());
       },
     );
+  });
 
-    test('should return TimeOutFailure when timeout occurs', () async {
-      // Arrange
+  group('get products by category', () {
+    final tCategory = 'electronics';
+
+    test('Debería retornar la lista de productos por categoría', () async {
       when(
-        mockDataSource.getCategories(),
-      ).thenThrow(CustomException(type: 'TimeoutException'));
+        mockFakeStoreDataSource.getProductByCategory(tCategory),
+      ).thenAnswer((_) async => tProducts);
 
-      // Act
-      final result = await repository.getCategories();
+      final result = await repositoryImpl.getProductByCategory(tCategory);
 
-      // Assert
-      result.fold(
-        (failure) => expect(failure, isA<TimeOutFailure>()),
-        (_) => fail('Expected Left but got Right'),
-      );
+      expect(result, isA<Right<Failure, List<Product>>>());
+      result.fold((failure) => fail('No debería retornar failure'), (products) {
+        expect(products.length, 2);
+        expect(products[0].category, tCategory);
+      });
     });
 
-    test('should return AnotherFailure for unknown exceptions', () async {
-      // Arrange
-      when(mockDataSource.getCategories()).thenThrow(
-        CustomException(
-          type: 'AnotherFailure',
-          title: 'Bad Request',
-          message: 'Invalid data',
-          codeError: 400,
-        ),
-      );
+    test('Debe mostrar un error cuando el llamado a la API falla', () async {
+      when(
+        mockFakeStoreDataSource.getProductByCategory(tCategory),
+      ).thenThrow(ServerException(message: 'Error'));
 
-      // Act
-      final result = await repository.getCategories();
+      final result = await repositoryImpl.getProductByCategory(tCategory);
 
-      // Assert
-      result.fold(
-        (failure) => expect(failure, isA<AnotherFailure>()),
-        (_) => fail('Expected Left but got Right'),
-      );
+      expect(result, isA<Left<Failure, List<Product>>>());
+    });
+  });
+
+  group('get user cart', () {
+    final tUserId = 1;
+
+    final tCart = Cart(
+      id: 1,
+      userId: 1,
+      date: '2020-03-02T00:00:00.000Z',
+      products: [
+        CartProducts(productId: 1, quantity: 4),
+        CartProducts(productId: 2, quantity: 1),
+      ],
+    );
+
+    test('Debería retornar los productos del carrito', () async {
+      when(
+        mockFakeStoreDataSource.getUserCart(tUserId),
+      ).thenAnswer((_) async => tCart);
+
+      final result = await repositoryImpl.getUserCart(tUserId);
+
+      expect(result, isA<Right<Failure, Cart>>());
+      result.fold((failure) => fail('No debería retornar failure'), (cart) {
+        expect(cart.id, 1);
+        expect(cart.products?.length, 2);
+      });
     });
 
-    // test('should return DataNull when data source returns null', () async {
-    //   // Arrange
-    //   when(mockDataSource.getCategories()).thenAnswer((_) async => null);
-
-    //   // Act
-    //   final result = await repository.getCategories();
-
-    //   // Assert
-    //   result.fold(
-    //     (failure) => expect(failure, isA<DataNull>()),
-    //     (_) => fail('Expected Left but got Right'),
-    //   );
-    // });
+    test('Debe mostrar un error cuando el llamado a la API falla', () async {
+      when(
+        mockFakeStoreDataSource.getUserCart(tUserId),
+      ).thenThrow(ServerException(message: 'Error'));
+      final result = await repositoryImpl.getUserCart(1);
+      expect(result, isA<Left<Failure, Cart>>());
+    });
   });
 }

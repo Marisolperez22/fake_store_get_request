@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
-import 'package:fake_store_get_request/domain/entities/product_entity.dart';
 
-import '../../core/utils/utils.dart';
+import '../models/cart.dart';
+import '../models/login_response.dart';
 import '../../core/errors/failures.dart';
 import '../datasources/fake_store_datasource.dart';
 import '../../domain/repositories/fake_store_repository.dart';
@@ -13,13 +13,12 @@ class FakeStoreRepositoryImpl implements FakeStoreRepository {
   FakeStoreRepositoryImpl({required this.dataSource});
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> getProducts() async {
+  Future<Either<Failure, List<Product>>> getProducts() async {
     try {
-      final productModel = await dataSource.getProducts();
-      final products = productModel.map((e) => e.toEntity()).toList();
+      final products = await dataSource.getProducts();
       return Right(products);
     } catch (e) {
-      return Utils.handleException(e);
+      return const Left(AnotherFailure());
     }
   }
 
@@ -29,38 +28,52 @@ class FakeStoreRepositoryImpl implements FakeStoreRepository {
       final categories = await dataSource.getCategories();
       return Right(categories);
     } catch (e) {
-      return Utils.handleException(e);
+      return const Left(AnotherFailure());
     }
   }
 
-  // @override
-  // Future<Product> getProductDetail(int productId) async {
-  //   final product = await dataSource.getProductDetail(productId);
-  //   return ProductModel.fromJson(product);
-  // }
+  @override
+  Future<Either<Failure, Cart>> getUserCart(int idUser) async {
+    try {
+      final cart = await dataSource.getUserCart(idUser);
+      return Right(cart);
+    } catch (e) {
+      return const Left(AnotherFailure());
+    }
+  }
 
-  // @override
-  // Future<List<Product>> getProductByCategory(String category) {
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<Either<Failure, Product>> getProductDetail(int productId) async {
+    try {
+      final productDetail = await dataSource.getProductDetail(productId);
+      return Right(productDetail);
+    } catch (e) {
+      return const Left(AnotherFailure());
+    }
+  }
 
-  // @override
-  // Future<List<Cart>> getUserCart(int idUser) {
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<Either<Failure, List<Product>>> getProductByCategory(
+    String category,
+  ) async {
+    try {
+      final productByCategory = await dataSource.getProductByCategory(category);
+      return Right(productByCategory);
+    } catch (e) {
+      return const Left(AnotherFailure());
+    }
+  }
 
-  // @override
-  // Future<List<User>> getUsers() {
-  //   throw UnimplementedError();
-  // }
-
-  // @override
-  // Future<LoginResponse> login(String username, String password) {
-  //   throw UnimplementedError();
-  // }
-
-  // @override
-  // Future<void> signUp(SignupRequest request) {
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<Either<Failure, LoginResponse>> login(
+    String username,
+    String password,
+  ) async {
+    try {
+      final login = await dataSource.login(username, password);
+      return Right(login);
+    } catch (e) {
+      return const Left(AnotherFailure());
+    }
+  }
 }
