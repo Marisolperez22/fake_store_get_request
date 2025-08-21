@@ -118,7 +118,7 @@ void main() {
       ).thenAnswer((_) async => tLoginResponse);
 
       // Act
-      final result = await repositoryImpl.login('test', 'test');
+      final result = await repositoryImpl.login('username', 'password');
 
       // Assert
       expect(result, isA<Right<Failure, LoginResponse>>());
@@ -131,7 +131,7 @@ void main() {
         // Arrange
         when(
           mockFakeStoreDataSource.login('username', 'password'),
-        ).thenAnswer((_) async => tLoginResponse);
+        ).thenThrow(ServerException(message: 'Error'));
 
         // Act
         final result = await repositoryImpl.login('username', 'password');

@@ -1,13 +1,9 @@
-import 'dart:convert';
 
 import 'package:fake_store_get_request/data/models/cart.dart';
-import 'package:fake_store_get_request/data/models/user.dart';
-import 'package:http/http.dart' as http;
 
 import '../core/infrastructure/api_client.dart';
 import '../data/models/product.dart';
 import '../data/models/login_response.dart';
-import '../data/models/sing_up_request.dart';
 
 class FakeStoreService {
   final ApiClient apiClient;

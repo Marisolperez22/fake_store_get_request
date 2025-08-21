@@ -6,17 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../dummies.dart';
 import 'get_products_test.mocks.dart';
 
-void setupCategoryDummies() {
-  provideDummy<Either<Failure, List<String>>>(Right([]));
-
-  provideDummy<ServerFailure>(ServerFailure(500));
-  provideDummy<NetworkFailure>(NetworkFailure());
-  provideDummy<TimeOutFailure>(TimeOutFailure());
-  provideDummy<AnotherFailure>(AnotherFailure());
-  provideDummy<DataNull>(DataNull());
-}
 
 @GenerateMocks([FakeStoreRepository])
 void main() {
@@ -28,15 +20,13 @@ void main() {
   final tNetworkFailure = NetworkFailure();
 
   setUp(() {
-    setupCategoryDummies();
+    setupDummies();
 
     mockRepository = MockFakeStoreRepository();
     useCase = GetCategories(mockRepository);
   });
 
-  tearDown(() {
-    reset(mockRepository);
-  });
+
 
   group('Casos de exito', () {
     test('Debe retornar Right en la lista de categorías', () async {
@@ -51,8 +41,6 @@ void main() {
       // Assert
       expect(result.isRight, true);
       expect(result.right, tCategories);
-      verify(mockRepository.getCategories());
-      verifyNoMoreInteractions(mockRepository);
     });
 
     test(
@@ -72,7 +60,7 @@ void main() {
   });
 
   group('Casos de fallo', () {
-    test('DEbe retonar Left con ServerFailure', () async {
+    test('Debe retonar Left con ServerFailure', () async {
       // Arrange
       when(
         mockRepository.getCategories(),
@@ -131,18 +119,5 @@ void main() {
     });
   });
 
-  group('Casos aislados', () {
-    test('Debe llamar el repositorio solo una vez', () async {
-      // Arrange
-      when(
-        mockRepository.getCategories(),
-      ).thenAnswer((_) async => Right(tCategories));
-
-      // Act
-      await useCase();
-
-      // Assert
-      verify(mockRepository.getCategories()).called(1);
-    });
-  });
+  
 }

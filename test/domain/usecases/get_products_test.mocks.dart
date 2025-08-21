@@ -67,19 +67,6 @@ class MockFakeStoreRepository extends _i1.Mock
           as _i3.Future<_i4.Either<_i5.Failure, List<_i7.Product>>>);
 
   @override
-  _i3.Future<_i4.Either<_i5.Failure, _i8.Cart>> getUserCart(int? idUser) =>
-      (super.noSuchMethod(
-            Invocation.method(#getUserCart, [idUser]),
-            returnValue: _i3.Future<_i4.Either<_i5.Failure, _i8.Cart>>.value(
-              _i6.dummyValue<_i4.Either<_i5.Failure, _i8.Cart>>(
-                this,
-                Invocation.method(#getUserCart, [idUser]),
-              ),
-            ),
-          )
-          as _i3.Future<_i4.Either<_i5.Failure, _i8.Cart>>);
-
-  @override
   _i3.Future<_i4.Either<_i5.Failure, _i7.Product>> getProductDetail(
     int? productId,
   ) =>
@@ -93,6 +80,19 @@ class MockFakeStoreRepository extends _i1.Mock
             ),
           )
           as _i3.Future<_i4.Either<_i5.Failure, _i7.Product>>);
+
+  @override
+  _i3.Future<_i4.Either<_i5.Failure, _i8.Cart>> getUserCart(int? idUser) =>
+      (super.noSuchMethod(
+            Invocation.method(#getUserCart, [idUser]),
+            returnValue: _i3.Future<_i4.Either<_i5.Failure, _i8.Cart>>.value(
+              _i6.dummyValue<_i4.Either<_i5.Failure, _i8.Cart>>(
+                this,
+                Invocation.method(#getUserCart, [idUser]),
+              ),
+            ),
+          )
+          as _i3.Future<_i4.Either<_i5.Failure, _i8.Cart>>);
 
   @override
   _i3.Future<_i4.Either<_i5.Failure, List<_i7.Product>>> getProductByCategory(

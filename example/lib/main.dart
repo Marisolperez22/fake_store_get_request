@@ -1,5 +1,4 @@
 import 'package:fake_store_get_request/data/models/cart.dart';
-import 'package:fake_store_get_request/data/models/login_response.dart';
 import 'package:fake_store_get_request/fake_store_get_request.dart';
 import 'package:flutter/material.dart';
 

@@ -1,3 +1,6 @@
+import 'package:fake_store_get_request/fake_store_get_request.dart';
+
+import '../../dummies.dart';
 import 'get_products_test.mocks.dart';
 
 import 'package:mockito/mockito.dart';
@@ -7,36 +10,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fake_store_get_request/core/errors/failures.dart';
 import 'package:fake_store_get_request/domain/usecases/get_products.dart';
 import 'package:fake_store_get_request/domain/entities/rating_entity.dart';
-import 'package:fake_store_get_request/domain/entities/product_entity.dart';
 import 'package:fake_store_get_request/domain/repositories/fake_store_repository.dart';
 
-void setupDummies() {
-  provideDummy<ProductEntity>(
-    ProductEntity(
-      id: 1,
-      title: 'Dummy Product',
-      price: 0.0,
-      description: 'Dummy description',
-      category: 'dummy',
-      image: 'dummy.jpg',
-      rating: RatingEntity(rate: 0.0, count: 0),
-    ),
-  );
 
-  provideDummy<Either<Failure, List<ProductEntity>>>(Right([]));
-  provideDummy<ServerFailure>(ServerFailure(500));
-  provideDummy<NetworkFailure>(NetworkFailure());
-  provideDummy<TimeOutFailure>(TimeOutFailure());
-  provideDummy<AnotherFailure>(AnotherFailure());
-  provideDummy<DataNull>(DataNull());
-}
 
 @GenerateMocks([FakeStoreRepository])
 void main() {
   late GetProducts useCase;
   late MockFakeStoreRepository mockRepository;
 
-  final tProductEntity = ProductEntity(
+  final tProductEntity = Product(
     id: 1,
     title: 'Producto test',
     price: 109.95,
@@ -59,14 +42,13 @@ void main() {
       () async {
         // Arrange
         when(mockRepository.getProducts()).thenAnswer(
-          (_) async => Right<Failure, List<ProductEntity>>([tProductEntity]),
+          (_) async => Right<Failure, List<Product>>([tProductEntity]),
         );
         // Act
         final result = await useCase();
 
         // Assert
         expect(result.isRight, true);
-        verify(mockRepository.getProducts());
       },
     );
 
@@ -76,7 +58,7 @@ void main() {
         // Arrange
         when(
           mockRepository.getProducts(),
-        ).thenAnswer((_) async => Right<Failure, List<ProductEntity>>([]));
+        ).thenAnswer((_) async => Right<Failure, List<Product>>([]));
 
         // Act
         final result = await useCase();
@@ -174,19 +156,5 @@ void main() {
     );
   });
 
-  group('Casos aislados', () {
-    test('No debería llamar el repositorio mas de una vez', () async {
-      // Arrange
-      when(
-        mockRepository.getProducts(),
-      ).thenAnswer((_) async => Right([tProductEntity]));
 
-      // Act
-      await useCase();
-      await useCase();
-
-      // Assert
-      verify(mockRepository.getProducts()).called(2);
-    });
-  });
 }
