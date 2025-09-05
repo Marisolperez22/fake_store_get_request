@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2025-08-21 05:36:26</td>
+            <td class="headerValue">2025-09-02 06:38:58</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -65,12 +65,12 @@
 <span id="L3"><span class="lineNum">       3</span>              :   final int? codeError;</span>
 <span id="L4"><span class="lineNum">       4</span>              :   final String? message;</span>
 <span id="L5"><span class="lineNum">       5</span>              : </span>
-<span id="L6"><span class="lineNum">       6</span> <span class="tlaGNC">          13 :   const Failure({this.title, this.message, this.codeError});</span></span>
+<span id="L6"><span class="lineNum">       6</span> <span class="tlaGNC">          15 :   const Failure({this.title, this.message, this.codeError});</span></span>
 <span id="L7"><span class="lineNum">       7</span>              : }</span>
 <span id="L8"><span class="lineNum">       8</span>              : </span>
 <span id="L9"><span class="lineNum">       9</span>              : ///When the response status is different than 200</span>
 <span id="L10"><span class="lineNum">      10</span>              : class ServerFailure extends Failure {</span>
-<span id="L11"><span class="lineNum">      11</span> <span class="tlaGNC">          12 :   const ServerFailure(this.statusCode) : super();</span></span>
+<span id="L11"><span class="lineNum">      11</span> <span class="tlaGNC">          14 :   const ServerFailure(this.statusCode) : super();</span></span>
 <span id="L12"><span class="lineNum">      12</span>              : </span>
 <span id="L13"><span class="lineNum">      13</span>              :   final int statusCode;</span>
 <span id="L14"><span class="lineNum">      14</span>              : }</span>
@@ -87,7 +87,7 @@
 <span id="L25"><span class="lineNum">      25</span>              : </span>
 <span id="L26"><span class="lineNum">      26</span>              : class AnotherFailure extends Failure {</span>
 <span id="L27"><span class="lineNum">      27</span>              :   ///When an unknown exception occurs</span>
-<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">          11 :   const AnotherFailure({super.message = '', super.codeError = 0});</span></span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">          12 :   const AnotherFailure({super.message = '', super.codeError = 0});</span></span>
 <span id="L29"><span class="lineNum">      29</span>              : }</span>
 <span id="L30"><span class="lineNum">      30</span>              : </span>
 <span id="L31"><span class="lineNum">      31</span>              : class DataNull extends Failure {</span>

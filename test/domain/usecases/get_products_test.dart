@@ -1,4 +1,5 @@
-import 'package:fake_store_get_request/fake_store_get_request.dart';
+
+import 'package:fake_store_get_request/data/models/product.dart';
 
 import '../../dummies.dart';
 import 'get_products_test.mocks.dart';

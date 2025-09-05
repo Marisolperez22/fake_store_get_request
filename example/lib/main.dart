@@ -1,5 +1,5 @@
 import 'package:fake_store_get_request/data/models/cart.dart';
-import 'package:fake_store_get_request/fake_store_get_request.dart';
+import 'package:fake_store_get_request/services/fake_store_service.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -73,3 +73,5 @@ class _ProductListScreenState extends State<ProductScreen> {
     );
   }
 }
+
+

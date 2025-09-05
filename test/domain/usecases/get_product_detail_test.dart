@@ -1,6 +1,6 @@
+import 'package:fake_store_get_request/data/models/product.dart';
 import 'package:fake_store_get_request/data/models/rating.dart';
 import 'package:fake_store_get_request/domain/usecases/get_product_detail.dart';
-import 'package:fake_store_get_request/fake_store_get_request.dart';
 
 import 'get_products_test.mocks.dart';
 

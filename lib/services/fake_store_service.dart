@@ -1,90 +1,93 @@
-
+import 'package:either_dart/either.dart';
 import 'package:fake_store_get_request/data/models/cart.dart';
+import 'package:fake_store_get_request/domain/usecases/get_categories.dart';
+import 'package:fake_store_get_request/domain/usecases/get_product_by_category.dart';
+import 'package:fake_store_get_request/domain/usecases/get_product_detail.dart';
+import 'package:fake_store_get_request/domain/usecases/get_products.dart';
+import 'package:fake_store_get_request/domain/usecases/get_user_cart.dart';
+import 'package:fake_store_get_request/domain/usecases/login.dart';
 
-import '../core/infrastructure/api_client.dart';
+import '../data/datasources/fake_store_datasource.dart';
 import '../data/models/product.dart';
 import '../data/models/login_response.dart';
+import '../data/repositories/fake_store_repository_impl.dart';
 
 class FakeStoreService {
-  final ApiClient apiClient;
-  static const String _baseUrl = 'https://fakestoreapi.com';
+  final GetProducts getProductsUsecase;
+  final GetProductDetail getProductDetailUsecase;
+  final Login loginUsecase;
+  final GetCategories getCategoriesUsecase;
+  final GetProductByCategory getProductsByCategoryUsecase;
+  final GetUserCart getUserCartUsecase;
 
-  FakeStoreService({ApiClient? apiClient})
-    : apiClient = apiClient ?? ApiClient();
+  FakeStoreService({String? baseUrl})
+      : getProductsUsecase = GetProducts(
+            FakeStoreRepositoryImpl(dataSource: FakeStoreRemoteDataSource())),
+        getProductDetailUsecase = GetProductDetail(
+            FakeStoreRepositoryImpl(dataSource: FakeStoreRemoteDataSource())),
+        loginUsecase =
+            Login(FakeStoreRepositoryImpl(dataSource: FakeStoreRemoteDataSource())),
+        getCategoriesUsecase = GetCategories(
+            FakeStoreRepositoryImpl(dataSource: FakeStoreRemoteDataSource())),
+        getProductsByCategoryUsecase = GetProductByCategory(
+            FakeStoreRepositoryImpl(dataSource: FakeStoreRemoteDataSource())),
+        getUserCartUsecase = GetUserCart(
+            FakeStoreRepositoryImpl(dataSource: FakeStoreRemoteDataSource()));
+
+  FakeStoreService.test({
+    required this.getProductsUsecase,
+    required this.getProductDetailUsecase,
+    required this.loginUsecase,
+    required this.getCategoriesUsecase,
+    required this.getProductsByCategoryUsecase,
+    required this.getUserCartUsecase,
+  });
 
   Future<List<Product>> getProducts() async {
-    final data = await apiClient.get('$_baseUrl/products');
-    return (data as List).map((json) => Product.fromJson(json)).toList();
+    final result = await getProductsUsecase();
+    return handleEither(result);
   }
 
   Future<Product> getProductDetail(int productId) async {
-    final data = await apiClient.get('$_baseUrl/products/$productId');
-    return Product.fromJson(data);
+    final result = await getProductDetailUsecase(productId);
+    return handleEither(result);
   }
 
-  // Future<LoginResponse> login(String username, String password) async {
-  //   final response = await client.post(
-  //     Uri.parse('$_baseUrl/auth/login'),
-  //     body: {"username": username, "password": password},
-  //   );
-
-  //   if (response.statusCode == 200) {
-  //     final token = LoginResponse.fromJson(jsonDecode(response.body));
-  //     final users = await getUsers();
-  //     final user = users.firstWhere(
-  //       (user) => user.username == username,
-  //       orElse: () => throw "Usuario no encontrado",
-  //     );
-
-  //     return LoginResponse(token: token.token, userId: user.id ?? 0);
-  //   } else {
-  //     throw 'Credenciales incorrectas';
-  //   }
-  // }
-
   Future<LoginResponse> login(String username, String password) async {
-    final data = await apiClient.post(
-      '$_baseUrl/auth/login',
-      body: {'username': username, 'password': password},
-    );
-    return LoginResponse.fromJson(data);
+    final result = await loginUsecase(username, password);
+    return handleEither(result);
   }
 
   Future<List<String>> getCategories() async {
-    final data = await apiClient.get('$_baseUrl/products/categories');
-    return (data as List).cast<String>();
+    final result = await getCategoriesUsecase();
+    return handleEither(result);
   }
 
-  Future<List<Product>> getProductByCategory(String category) async {
-    final data = await apiClient.get('$_baseUrl/products/category/$category');
-    return (data as List).map((json) => Product.fromJson(json)).toList();
+  Future<List<Product>> getProductsByCategory(String category) async {
+    final result = await getProductsByCategoryUsecase(category);
+    return handleEither(result);
   }
 
-  // Future<List<User>> getUsers() async {
-  //   final response = await client.get(Uri.parse('$_baseUrl/users'));
-  //   if (response.statusCode == 200) {
-  //     final List data = json.decode(response.body);
-  //     return data.map((json) => User.fromJson(json)).toList();
-  //   } else {
-  //     throw Exception('Error al cargar usuarios');
-  //   }
-  // }
+  Future<Cart> getUserCart(int userId) async {
+    final result = await getUserCartUsecase(userId);
+    return handleEither(result);
+  }
 
-  Future<Cart> getUserCart(int idUser) async {
-    final data = await apiClient.get('$_baseUrl/carts/$idUser');
-    return Cart.fromJson(data);
+  T handleEither<E, T>(Either<E, T> either) {
+    return either.fold(
+      (failure) => throw mapFailureToException(failure),
+      (success) => success,
+    );
+  }
+
+  Exception mapFailureToException(failure) {
+    if (failure is String) {
+      return Exception(failure);
+    } else if (failure is Exception) {
+      return failure;
+    } else {
+      return Exception('An unexpected error occurred');
+    }
   }
 }
-
-  // Future<void> signUp(SignupRequest request) async {
-  //   final response = await http.post(
-  //     Uri.parse('$_baseUrl/users'),
-  //     headers: {'Content-Type': 'application/json'},
-  //     body: jsonEncode(request.toJson()),
-  //   );
-
-  //   if (response.statusCode != 200) {
-  //     throw Exception('Failed to sign up: ${response.body}');
-  //   }
-  // }
 
