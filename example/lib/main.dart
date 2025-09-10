@@ -60,7 +60,7 @@ class _ProductListScreenState extends State<ProductScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           final products = snapshot.data!;
-          return Text((products.products?[0].quantity).toString());
+          return Text((products.products?[0].productId).toString());
           // return ListView.builder(
           //   itemCount: products.length,
           //   itemBuilder: (context, index) {
